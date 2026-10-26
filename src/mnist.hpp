@@ -18,7 +18,12 @@ struct Dataset {
         return labels.size();
     }
 };
-
+// reads four bytes at a time - reads four bytes from a big-endian binary file
+/*
+Note: endianness only matters for values that are more than one byte. This is why
+this function is only used for the header values, but not for the image data - because
+each pixel in the image is a single byte only.
+*/
 inline std::uint32_t read_u32_be(std::ifstream& in) {
     unsigned char b[4];
     in.read(reinterpret_cast<char*>(b), 4);
@@ -43,7 +48,7 @@ inline std::vector<std::vector<double>> load_images(const std::string& path, int
     rows = static_cast<int>(read_u32_be(in));
     cols = static_cast<int>(read_u32_be(in));
 
-    const auto pixels = static_cast<std::size_t>(rows) * static_cast<std::size_t>(cols);
+    const std::size_t pixels = static_cast<std::size_t>(rows) * static_cast<std::size_t>(cols);
     std::vector<std::vector<double>> images(count, std::vector<double>(pixels));
     std::vector<unsigned char> buffer(pixels);
 
