@@ -88,7 +88,14 @@ inline std::vector<int> load_labels(const std::string& path) {
     return std::vector<int>(buffer.begin(), buffer.end());
 }
 
-inline Dataset load_mnist(const std::string& dir, const std::string&prefix) {
+
+/*
+ * This function actually returns the data structure containing the dataset in the
+ * nice vector/container array form that the code will actually be able to read and work with.
+ * Basically this is the final step from processing the raw data binaries, to producing the
+ * actual arrays that contain the data the code will be able to operate on.
+*/
+inline Dataset load_mnist(const std::string& dir, const std::string& prefix) {
     Dataset d;
 
     d.images = load_images(dir + "/" + prefix + "-images-idx3-ubyte", d.rows, d.cols);
@@ -100,6 +107,8 @@ inline Dataset load_mnist(const std::string& dir, const std::string&prefix) {
     return d;
 }
 
+
+// This is a purely optional function that just demos something cool!
 inline void print_digit(const std::vector<double>& image, int rows, int cols) {
     const std::string ramp = " .:-=+*#%@"; // 10 shades, from 0.0 up to 1.0
     for (int r = 0; r < rows; ++r) {
